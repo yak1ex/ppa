@@ -1,0 +1,80 @@
+Index: llvm-toolchain_3.3~svn179457/clang/include/clang/Basic/Builtins.def
+===================================================================
+--- llvm-toolchain_3.3~svn179457.orig/clang/include/clang/Basic/Builtins.def	2013-01-18 00:46:04.000000000 +0100
++++ llvm-toolchain_3.3~svn179457/clang/include/clang/Basic/Builtins.def	2013-04-13 10:29:23.869932640 +0200
+@@ -464,8 +464,8 @@
+ BUILTIN(__builtin___stpcpy_chk, "c*c*cC*z", "nF")
+ BUILTIN(__builtin___strcat_chk, "c*c*cC*z", "nF")
+ BUILTIN(__builtin___strcpy_chk, "c*c*cC*z", "nF")
+-BUILTIN(__builtin___strlcat_chk, "zc*cC*zz", "nF")
+-BUILTIN(__builtin___strlcpy_chk, "zc*cC*zz", "nF")
++//BUILTIN(__builtin___strlcat_chk, "zc*cC*zz", "nF")
++//BUILTIN(__builtin___strlcpy_chk, "zc*cC*zz", "nF")
+ BUILTIN(__builtin___strncat_chk, "c*c*cC*zz", "nF")
+ BUILTIN(__builtin___strncpy_chk, "c*c*cC*zz", "nF")
+ BUILTIN(__builtin___stpncpy_chk, "c*c*cC*zz", "nF")
+@@ -758,8 +758,8 @@
+ LIBBUILTIN(_longjmp, "vJi",       "fr",    "setjmp.h", ALL_LANGUAGES)
+ LIBBUILTIN(siglongjmp, "vSJi",    "fr",    "setjmp.h", ALL_LANGUAGES)
+ // non-standard but very common
+-LIBBUILTIN(strlcpy, "zc*cC*z",    "f",     "string.h", ALL_LANGUAGES)
+-LIBBUILTIN(strlcat, "zc*cC*z",    "f",     "string.h", ALL_LANGUAGES)
++//LIBBUILTIN(strlcpy, "zc*cC*z",    "f",     "string.h", ALL_LANGUAGES)
++//LIBBUILTIN(strlcat, "zc*cC*z",    "f",     "string.h", ALL_LANGUAGES)
+ //   id objc_msgSend(id, SEL, ...)
+ LIBBUILTIN(objc_msgSend, "GGH.",   "f",     "objc/message.h", OBJC_LANG)
+ // long double objc_msgSend_fpret(id self, SEL op, ...) 
+Index: llvm-toolchain_3.3~svn179457/clang/lib/Sema/SemaChecking.cpp
+===================================================================
+--- llvm-toolchain_3.3~svn179457.orig/clang/lib/Sema/SemaChecking.cpp	2013-04-10 08:26:26.000000000 +0200
++++ llvm-toolchain_3.3~svn179457/clang/lib/Sema/SemaChecking.cpp	2013-04-13 10:29:23.873932640 +0200
+@@ -575,9 +575,10 @@
+     return false;
+ 
+   // Handle memory setting and copying functions.
+-  if (CMId == Builtin::BIstrlcpy || CMId == Builtin::BIstrlcat)
+-    CheckStrlcpycatArguments(TheCall, FnInfo);
+-  else if (CMId == Builtin::BIstrncat)
++//  if (CMId == Builtin::BIstrlcpy || CMId == Builtin::BIstrlcat)
++//    CheckStrlcpycatArguments(TheCall, FnInfo);
++//  else
++  if (CMId == Builtin::BIstrncat)
+     CheckStrncatArguments(TheCall, FnInfo);
+   else
+     CheckMemaccessArguments(TheCall, CMId, FnInfo);
+Index: llvm-toolchain_3.3~svn179457/clang/lib/AST/Decl.cpp
+===================================================================
+--- llvm-toolchain_3.3~svn179457.orig/clang/lib/AST/Decl.cpp	2013-04-04 06:40:17.000000000 +0200
++++ llvm-toolchain_3.3~svn179457/clang/lib/AST/Decl.cpp	2013-04-13 10:29:23.873932640 +0200
+@@ -2681,10 +2681,10 @@
+   case Builtin::BImemmove:
+     return Builtin::BImemmove;
+ 
+-  case Builtin::BIstrlcpy:
+-    return Builtin::BIstrlcpy;
+-  case Builtin::BIstrlcat:
+-    return Builtin::BIstrlcat;
++//  case Builtin::BIstrlcpy:
++//    return Builtin::BIstrlcpy;
++//  case Builtin::BIstrlcat:
++//    return Builtin::BIstrlcat;
+ 
+   case Builtin::BI__builtin_memcmp:
+   case Builtin::BImemcmp:
+Index: llvm-toolchain_3.3~svn179457/clang/lib/StaticAnalyzer/Checkers/GenericTaintChecker.cpp
+===================================================================
+--- llvm-toolchain_3.3~svn179457.orig/clang/lib/StaticAnalyzer/Checkers/GenericTaintChecker.cpp	2013-02-20 23:23:23.000000000 +0100
++++ llvm-toolchain_3.3~svn179457/clang/lib/StaticAnalyzer/Checkers/GenericTaintChecker.cpp	2013-04-13 10:29:23.877932640 +0200
+@@ -238,9 +238,9 @@
+     case Builtin::BIstrncpy:
+     case Builtin::BIstrncat:
+       return TaintPropagationRule(1, 2, 0, true);
+-    case Builtin::BIstrlcpy:
+-    case Builtin::BIstrlcat:
+-      return TaintPropagationRule(1, 2, 0, false);
++//    case Builtin::BIstrlcpy:
++//    case Builtin::BIstrlcat:
++//      return TaintPropagationRule(1, 2, 0, false);
+     case Builtin::BIstrndup:
+       return TaintPropagationRule(0, 1, ReturnValueIndex);
+ 

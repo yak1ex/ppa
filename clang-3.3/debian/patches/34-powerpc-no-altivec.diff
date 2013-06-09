@@ -1,0 +1,24 @@
+Description: Make sure PowerPC doesn't default to altivec on
+Author: Adam Conrad <adconrad@ubuntu.com>
+Author: Peter Michael Green <plugwash@debian.org>
+Forwarded: no
+Reviewed-By: Colin Watson <cjwatson@ubuntu.com>
+
+Last-Update: 2013-04-01
+
+Index: llvm-toolchain_3.3~svn179457/clang/lib/Lex/Makefile
+===================================================================
+--- llvm-toolchain_3.3~svn179457.orig/clang/lib/Lex/Makefile	2013-04-13 10:29:49.861931633 +0200
++++ llvm-toolchain_3.3~svn179457/clang/lib/Lex/Makefile	2013-04-13 10:29:57.785931326 +0200
+@@ -16,11 +16,5 @@
+ 
+ LIBRARYNAME := clangLex
+ 
+-ifeq ($(ARCH),PowerPC)
+-ifneq ($(shell dpkg-architecture -qDEB_HOST_ARCH),powerpcspe)
+-CXX.Flags += -maltivec
+-endif
+-endif
+-
+ include $(CLANG_LEVEL)/Makefile
+ 
