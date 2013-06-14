@@ -1,8 +1,7 @@
 Source: llvm-toolchain
 Section: devel
-Priority: optional
-Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
-Uploaders: Sylvestre Ledru <sylvestre@debian.org>
+Priority: extra
+Maintainer: Yasutaka ATARASHI <atara-y@mx.scn.tv>
 Build-Depends: debhelper (>= 9.0), flex, bison, dejagnu, tcl8.5, expect,
     autoconf, automake1.9, perl, libtool, doxygen, chrpath, texinfo,
     sharutils, autotools-dev (>= 20060702.1), libffi-dev (>= 3.0.9),
@@ -12,18 +11,15 @@ Build-Depends: debhelper (>= 9.0), flex, bison, dejagnu, tcl8.5, expect,
     lcov
 Build-Conflicts: oprofile, ocaml
 Standards-Version: 3.9.3
-Homepage: http://www.llvm.org/
-Vcs-Svn: svn://svn.debian.org/svn/pkg-llvm/llvm-toolchain/branches/snapshot/
-Vcs-Browser: http://svn.debian.org/viewsvn/pkg-llvm/llvm-toolchain/branches/snapshot/
+Homepage: https://github.com/yak1ex/ppa
+Vcs-Browser: http://github.com/yak1ex/ppa
 
 Package: clang-3.3
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${dep:devlibs},
- libclang-common-dev (= ${binary:Version})
+ libclang-3.3-common-dev (= ${binary:Version})
 Provides: c-compiler, objc-compiler, c++-compiler
 Recommends: llvm-3.3-dev, python
-Replaces: clang (<< 1:3.3), clang-3.1, clang-3.2, compiler-rt
-Breaks: clang (<< 1:3.3), clang-3.1, clang-3.2, compiler-rt
 Description: C, C++ and Objective-C compiler (LLVM based)
  Clang project is a C, C++, Objective C and Objective C++ front-end
  for the LLVM compiler. Some of its goals include the following:
@@ -80,7 +76,7 @@ Description: C, C++ and Objective-C compiler (LLVM based) - Documentation
  .
  This package contains the documentation.
 
-Package: libclang1
+Package: libclang1-3.3
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${dep:devlibs}
 Description: clang library
@@ -110,7 +106,7 @@ Description: clang library
  .
  This package contains the clang library.
 
-Package: libclang1-dbg
+Package: libclang1-3.3-dbg
 Architecture: any
 Section: debug
 Priority: extra
@@ -142,11 +138,11 @@ Description: clang library
  .
  This package contains the debugging symbols.
 
-Package: libclang-dev
+Package: libclang-3.3-dev
 Architecture: any
 Section: libdevel
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${dep:devlibs},
- libclang1 (= ${binary:Version}), libclang-common-dev (= ${binary:Version})
+ libclang1-3.3 (= ${binary:Version}), libclang-3.3-common-dev (= ${binary:Version})
 Description: clang library - Development package
  Clang project is a C, C++, Objective C and Objective C++ front-end
  for the LLVM compiler. Some of its goals include the following:
@@ -174,12 +170,11 @@ Description: clang library - Development package
  .
  This package contains the clang headers to develop extensions over libclang.
 
-Package: libclang-common-dev
+Package: libclang-3.3-common-dev
 Architecture: any
 Section: libdevel
 Depends: ${misc:Depends}, libllvm3.3 (= ${binary:Version})
-Replaces: llvm-3.3-dev (<< 1:3.2repack), libclang-dev
-Breaks: llvm-3.3-dev (<< 1:3.2repack)
+Replaces: libclang-3.3-dev
 Description: clang library - Common development package
  Clang project is a C, C++, Objective C and Objective C++ front-end
  for the LLVM compiler. Some of its goals include the following:
@@ -410,8 +405,6 @@ Package: lldb-3.3
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libllvm3.3 (= ${binary:Version}), python
 Pre-Depends: ${misc:Pre-Depends}
-Replaces: lldb-3.2
-Breaks: lldb-3.2
 Description: Next generation, high-performance debugger
  LLDB is a next generation, high-performance debugger. It is built as a set of
  reusable components which highly leverage existing libraries in the larger LLVM
