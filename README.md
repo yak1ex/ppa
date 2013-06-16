@@ -25,8 +25,8 @@ http://llvm.org/apt/ (LLVM Debian/Ubuntu nightly packages)
 reference
 ---------
 
-https://github.com/hATrayflood/llvm-ppa Upstream is adjusted by referring this repo.
-https://launchpad.net/~ubuntu-toolchain-r/+archive/test Dependent on this ppa.
+- https://github.com/hATrayflood/llvm-ppa Upstream is adjusted by referring this repo.
+- https://launchpad.net/~ubuntu-toolchain-r/+archive/test Dependent on this ppa.
 
 launchpad
 ---------
