@@ -1,3 +1,10 @@
+llvm-toolchain-3.3 (1:3.3-1ppa1~exp1) precise; urgency=low
+
+  * Use tag/RELEASE_33/final tag.
+  * Add version number to source package name to avoid conflict.
+
+ -- Yasutaka ATARASHI <atara-y@mx.scn.tv>  Mon, 17 Jun 2013 00:01:54 +0900
+
 llvm-toolchain (1:3.3~svn183554-1ppa1~exp1) precise; urgency=low
 
   * ppa for precise
