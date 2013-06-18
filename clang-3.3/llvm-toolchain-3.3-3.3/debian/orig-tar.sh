@@ -19,7 +19,11 @@ get_svn_url() {
     MODULE=$1
     BRANCH=$2
     if test -n "$BRANCH"; then
-        SVN_URL="$SVN_BASE_URL/$MODULE/branches/$BRANCH"
+        if test `expr $BRANCH : tags/` -eq 0; then
+            SVN_URL="$SVN_BASE_URL/$MODULE/branches/$BRANCH"
+        else
+            SVN_URL="$SVN_BASE_URL/$MODULE/$BRANCH/final"
+        fi
     else
         SVN_URL="$SVN_BASE_URL/$MODULE/trunk/"
     fi
@@ -41,64 +45,65 @@ get_higher_revision() {
 
 
 if test -n "$BRANCH"; then
-    REVISION=$(get_higher_revision)
+    if test `expr $BRANCH : tags/` -eq 0; then
+        REVISION=~svn$(get_higher_revision)
+    fi
     # Do not use the revision when exporting branch. We consider that all the
     # branch are sync
     SVN_CMD="svn export"
 else
-    REVISION=$(LANG=C svn info $(get_svn_url llvm)|grep "^Revision:"|awk '{print $2}')
+    REVISION=~svn$(LANG=C svn info $(get_svn_url llvm)|grep "^Revision:"|awk '{print $2}')
     SVN_CMD="svn export -r $REVISION"
 fi
 
 MAJOR_VERSION=3.3
+LLVM_SRC_TARGET=llvm-toolchain-${MAJOR_VERSION}_$MAJOR_VERSION$REVISION
 
 # LLVM
-LLVM_TARGET=llvm-toolchain_$MAJOR_VERSION~svn$REVISION
+LLVM_TARGET=llvm-toolchain_$MAJOR_VERSION$REVISION
 $SVN_CMD $(get_svn_url llvm $BRANCH) $LLVM_TARGET
-tar jcvf llvm-toolchain_$MAJOR_VERSION~svn$REVISION.orig.tar.bz2 $LLVM_TARGET
+tar jcvf $LLVM_SRC_TARGET.orig.tar.bz2 $LLVM_TARGET
 rm -rf $LLVM_TARGET
 
 
 # Clang
-CLANG_TARGET=clang_$MAJOR_VERSION~svn$REVISION
+CLANG_TARGET=clang_$MAJOR_VERSION$REVISION
 $SVN_CMD $(get_svn_url cfe $BRANCH) $CLANG_TARGET
-tar jcvf llvm-toolchain_$MAJOR_VERSION~svn$REVISION.orig-clang.tar.bz2 $CLANG_TARGET
+tar jcvf $LLVM_SRC_TARGET.orig-clang.tar.bz2 $CLANG_TARGET
 rm -rf $CLANG_TARGET
 
 
 # Clang extra
-CLANG_TARGET=clang-tools-extra_$MAJOR_VERSION~svn$REVISION
+CLANG_TARGET=clang-tools-extra_$MAJOR_VERSION$REVISION
 $SVN_CMD $(get_svn_url clang-tools-extra $BRANCH) $CLANG_TARGET
-tar jcvf llvm-toolchain_$MAJOR_VERSION~svn$REVISION.orig-clang-tools-extra.tar.bz2 $CLANG_TARGET
+tar jcvf $LLVM_SRC_TARGET.orig-clang-tools-extra.tar.bz2 $CLANG_TARGET
 rm -rf $CLANG_TARGET
 
 # Compiler-rt
-COMPILER_RT_TARGET=compiler-rt_$MAJOR_VERSION~svn$REVISION
+COMPILER_RT_TARGET=compiler-rt_$MAJOR_VERSION$REVISION
 $SVN_CMD $(get_svn_url compiler-rt $BRANCH) $COMPILER_RT_TARGET
-tar jcvf llvm-toolchain_$MAJOR_VERSION~svn$REVISION.orig-compiler-rt.tar.bz2 $COMPILER_RT_TARGET
+tar jcvf $LLVM_SRC_TARGET.orig-compiler-rt.tar.bz2 $COMPILER_RT_TARGET
 rm -rf $COMPILER_RT_TARGET
 
 # Polly
-POLLY_TARGET=polly_$MAJOR_VERSION~svn$REVISION
+POLLY_TARGET=polly_$MAJOR_VERSION$REVISION
 $SVN_CMD $(get_svn_url polly $BRANCH) $POLLY_TARGET
-tar jcvf llvm-toolchain_$MAJOR_VERSION~svn$REVISION.orig-polly.tar.bz2 $POLLY_TARGET
+tar jcvf $LLVM_SRC_TARGET.orig-polly.tar.bz2 $POLLY_TARGET
 rm -rf $POLLY_TARGET
 
 # LLDB
-LLDB_TARGET=lldb_$MAJOR_VERSION~svn$REVISION
+LLDB_TARGET=lldb_$MAJOR_VERSION$REVISION
 $SVN_CMD $(get_svn_url lldb $BRANCH) $LLDB_TARGET
-tar jcvf llvm-toolchain_$MAJOR_VERSION~svn$REVISION.orig-lldb.tar.bz2 $LLDB_TARGET
+tar jcvf $LLVM_SRC_TARGET.orig-lldb.tar.bz2 $LLDB_TARGET
 rm -rf $LLDB_TARGET
 
 PATH_DEBIAN="$(pwd)/$(dirname $0)/../"
 echo "going into $PATH_DEBIAN"
-export DEBFULLNAME="Sylvestre Ledru"
-export DEBEMAIL="sylvestre@debian.org"
 cd $PATH_DEBIAN
 
 if test -z "$DISTRIBUTION"; then
-    DISTRIBUTION="experimental"
+    DISTRIBUTION="precise"
 fi
-dch --distribution $DISTRIBUTION --newversion 1:$MAJOR_VERSION~svn$REVISION-1~exp1 "New snapshot release"
+dch --distribution $DISTRIBUTION --newversion 1:$MAJOR_VERSION$REVISION-1~exp1 "New snapshot release"
 
 exit 0
