@@ -1,11 +1,11 @@
 #!/bin/sh
 # This script will create the following tarballs:
-# llvm-toolchain-3.2_3.2repack.orig-clang.tar.bz2
-# llvm-toolchain-3.2_3.2repack.orig-clang-extra.tar.bz2
-# llvm-toolchain-3.2_3.2repack.orig-compiler-rt.tar.bz2
-# llvm-toolchain-3.2_3.2repack.orig-lldb.tar.bz2
-# llvm-toolchain-3.2_3.2repack.orig-polly.tar.bz2
-# llvm-toolchain-3.2_3.2repack.orig.tar.bz2
+# llvm-toolchain-snapshot-3.2_3.2repack.orig-clang.tar.bz2
+# llvm-toolchain-snapshot-3.2_3.2repack.orig-clang-extra.tar.bz2
+# llvm-toolchain-snapshot-3.2_3.2repack.orig-compiler-rt.tar.bz2
+# llvm-toolchain-snapshot-3.2_3.2repack.orig-lldb.tar.bz2
+# llvm-toolchain-snapshot-3.2_3.2repack.orig-polly.tar.bz2
+# llvm-toolchain-snapshot-3.2_3.2repack.orig.tar.bz2
 set -e
 
 SVN_BASE_URL=http://llvm.org/svn/llvm-project/
@@ -31,7 +31,7 @@ get_svn_url() {
 }
 
 get_higher_revision() {
-    PROJECTS="llvm cfe compiler-rt polly lldb"
+    PROJECTS="llvm cfe compiler-rt polly lldb clang-tools-extra"
     REVISION_MAX=0
     for f in $PROJECTS; do
         REVISION=$(LANG=C svn info $(get_svn_url $f $BRANCH)|grep "^Last Changed Rev:"|awk '{print $4}')
