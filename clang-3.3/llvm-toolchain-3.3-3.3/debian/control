@@ -1,4 +1,4 @@
-Source: llvm-toolchain
+Source: llvm-toolchain-3.3
 Section: devel
 Priority: extra
 Maintainer: Yasutaka ATARASHI <atara-y@mx.scn.tv>
