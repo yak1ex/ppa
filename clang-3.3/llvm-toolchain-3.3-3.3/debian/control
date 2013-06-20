@@ -51,8 +51,6 @@ Description: C, C++ and Objective-C compiler (LLVM based)
 Package: clang-format-3.3
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Replaces: clang-format-3.4
-Breaks: clang-format-3.4
 Description: Tool to format C/C++/Obj-C code
  Clang-format is both a library and a stand-alone tool with the goal of
  automatically reformatting C++ sources files according to configurable
@@ -68,8 +66,6 @@ Description: Tool to format C/C++/Obj-C code
 Package: cpp11-migrate-3.3
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Replaces: cpp11-migrate-3.4
-Breaks: cpp11-migrate-3.4
 Description: Tool to convert C++98 and C++03 code to C++11
  The purpose of the C++11 Migrator is to do source-to-source translation to
  migrate existing C++ code to use C++11 features to enhance
