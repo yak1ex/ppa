@@ -263,7 +263,7 @@ override_dh_auto_clean:
 	find utils -name '*.pyc' | xargs -r rm -f
 	find test -name '*.pyc' -o -name '*.o' -o -name '*.cm[ix]' | xargs -r rm -f
 	rm -f tools/clang tools/polly tools/lldb projects/compiler-rt
-	rm -rf tools/clang/tools/extra
+	rm -rf clang/tools/extra
 	rm -rf clang/docs/_build
 	find lldb/test \( -name '*.pyc' -o -name '*.o' -o -name '*.cm[ix]' \) -print0 | xargs -0 -r rm -f
 
