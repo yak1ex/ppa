@@ -3,6 +3,7 @@ PPA by yak\_ex
 
 Packages for Ubuntu 12.04 (precise).
 Main purpose is to use in C++ Compiler Farm (https://ccf.myhome.cx:5000/).
+Therefore, they are intended to co-exist with other versions of compilers. 
 
 provides
 --------
@@ -20,7 +21,7 @@ usage
 upstream
 --------
 
-http://llvm.org/apt/ (LLVM Debian/Ubuntu nightly packages)
+https://launchpad.net/ubuntu/+source/llvm-toolchain-3.3/1:3.3-1
 
 reference
 ---------
